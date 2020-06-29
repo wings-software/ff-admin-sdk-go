@@ -1,0 +1,1018 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: ff@harness.io
+    name: Feature Flag - developers
+    url: https://www.harness.io
+  title: Harness feature flag service
+  version: 1.0.0
+servers:
+- description: Server description
+  url: http://localhost:3000/api/1.0
+tags:
+- description: Health endpoints.
+  name: health
+- description: Admin operations.
+  name: admin
+paths:
+  /health:
+    get:
+      operationId: GetHealthStatus
+      responses:
+        "200":
+          content:
+            application/json; charset=utf-8:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+          description: OK
+        "503":
+          description: Service Unavailable
+      summary: Request basic health status.
+      tags:
+      - health
+  /admin/feature-flag:
+    get:
+      description: Used to retrieve all feature flags for certain account id.
+      operationId: GetAllFeatureFlags
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve all feature flags.
+      tags:
+      - admin
+    post:
+      description: Used to create feature flag.
+      operationId: CreateFeatureFlag
+      requestBody:
+        $ref: '#/components/requestBodies/FeatureFlagRequest'
+      responses:
+        "201":
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Create feature flag.
+      tags:
+      - admin
+  /admin/feature-flag/{id}:
+    delete:
+      description: Used to delete feature flag with certain id and account id.
+      operationId: DeleteFeatureFlag
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Delete feature flag.
+      tags:
+      - admin
+    get:
+      description: Used to retrieve certain feature flags for certain id and account
+        id.
+      operationId: GetFeatureFlag
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve feature flag.
+      tags:
+      - admin
+    patch:
+      description: Used to modify feature flag with certain id and account id.
+      operationId: ModifyFeatureFlag
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/FeatureFlagRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureFlag'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Modify feature flag.
+      tags:
+      - admin
+  /admin/target:
+    get:
+      description: Used to retrieve all targets for certain account id.
+      operationId: GetAllTargets
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Target'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve all targets.
+      tags:
+      - admin
+    post:
+      description: Used to create target.
+      operationId: CreateTarget
+      requestBody:
+        $ref: '#/components/requestBodies/TargetRequest'
+      responses:
+        "201":
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Create target.
+      tags:
+      - admin
+  /admin/target/{id}:
+    delete:
+      description: Used to delete target with certain id and account id.
+      operationId: DeleteTarget
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Delete target.
+      tags:
+      - admin
+    get:
+      description: Used to retrieve certain target for certain id and account id.
+      operationId: GetTarget
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Target'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve target.
+      tags:
+      - admin
+    patch:
+      description: Used to modify target with certain id and account id.
+      operationId: ModifyTarget
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/TargetRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Target'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Modify target.
+      tags:
+      - admin
+  /admin/target-segment:
+    get:
+      description: Used to retrieve all target segments for certain account id.
+      operationId: GetAllTargetSegments
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetSegment'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve all target segments.
+      tags:
+      - admin
+    post:
+      description: Used to create target segment.
+      operationId: CreateTargetSegment
+      requestBody:
+        $ref: '#/components/requestBodies/TargetSegmentRequest'
+      responses:
+        "201":
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Create target segment.
+      tags:
+      - admin
+  /admin/target-segment/{id}:
+    delete:
+      description: Used to delete target segment with certain id and account id.
+      operationId: DeleteTargetSegment
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No content
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Delete target segment.
+      tags:
+      - admin
+    get:
+      description: Used to retrieve certain target segment for certain id and account
+        id.
+      operationId: GetTargetSegment
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetSegment'
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Retrieve target segment.
+      tags:
+      - admin
+    patch:
+      description: Used to modify target segment with certain id and account id.
+      operationId: ModifyTargetSegment
+      parameters:
+      - description: resource ID
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/TargetSegmentRequest'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TargetSegment'
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthenticated
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource was not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The specified resource already exists
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Internal server error
+      summary: Modify target segment.
+      tags:
+      - admin
+components:
+  parameters:
+    uuidParam:
+      description: resource ID
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  requestBodies:
+    FeatureFlagRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FeatureFlag'
+      required: true
+    TargetRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Target'
+      required: true
+    TargetSegmentRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TargetSegment'
+      required: true
+  responses:
+    FeatureFlagResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FeatureFlag'
+      description: OK
+    Unauthenticated:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unauthenticated
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Unauthorized
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The specified resource was not found
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Internal server error
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Bad request
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: The specified resource already exists
+    TargetResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Target'
+      description: OK
+    TargetSegmentResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TargetSegment'
+      description: OK
+  schemas:
+    HealthResponse:
+      example:
+        healthy: true
+      properties:
+        healthy:
+          type: boolean
+      type: object
+    FeatureFlagState:
+      enum:
+      - "on"
+      - "off"
+      - archived
+      type: string
+    Variation:
+      example:
+        value: value
+        key: key
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required:
+      - key
+      - value
+      type: object
+    Tag:
+      description: A name and value pair.
+      example:
+        name: name
+        value: value
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      type: object
+    FeatureFlag:
+      example:
+        kind: boolean
+        variations:
+        - value: value
+          key: key
+        - value: value
+          key: key
+        key: key
+        tags:
+        - name: name
+          value: value
+        - name: name
+          value: value
+      properties:
+        key:
+          type: string
+        state:
+          $ref: '#/components/schemas/FeatureFlagState'
+        kind:
+          enum:
+          - boolean
+          - int
+          - string
+          - json
+          type: string
+        variations:
+          items:
+            $ref: '#/components/schemas/Variation'
+          minItems: 2
+          type: array
+        tags:
+          items:
+            $ref: '#/components/schemas/Tag'
+          type: array
+      required:
+      - key
+      - kind
+      - status
+      - variations
+      type: object
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    Target:
+      example:
+        country: country
+        firstName: firstName
+        lastName: lastName
+        ip: ip
+        custom: '{}'
+        name: name
+        anonymous: true
+        key: key
+        email: email
+      properties:
+        key:
+          type: string
+        ip:
+          type: string
+        country:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        name:
+          type: string
+        anonymous:
+          type: boolean
+        custom:
+          type: object
+      type: object
+    Clause:
+      example:
+        op: op
+        negate: true
+        values:
+        - '{}'
+        - '{}'
+        attribute: attribute
+      properties:
+        attribute:
+          type: string
+        op:
+          type: string
+        values:
+          items:
+            type: object
+          type: array
+        negate:
+          type: boolean
+      type: object
+    TargetSegment:
+      example:
+        excluded:
+        - excluded
+        - excluded
+        name: Beta Testers
+        rules:
+        - op: op
+          negate: true
+          values:
+          - '{}'
+          - '{}'
+          attribute: attribute
+        - op: op
+          negate: true
+          values:
+          - '{}'
+          - '{}'
+          attribute: attribute
+        included:
+        - included
+        - included
+        key: key
+        tags:
+        - name: name
+          value: value
+        - name: name
+          value: value
+      properties:
+        key:
+          description: Unique identifier for the target segment.
+          type: string
+        name:
+          description: Name of the target segment.
+          example: Beta Testers
+          type: string
+        tags:
+          items:
+            $ref: '#/components/schemas/Tag'
+          type: array
+        included:
+          items:
+            type: string
+          type: array
+        excluded:
+          items:
+            type: string
+          type: array
+        rules:
+          description: An array of rules that can cause a user to be included in this
+            segment.
+          items:
+            $ref: '#/components/schemas/Clause'
+          type: array
+      required:
+      - key
+      - name
+      type: object
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
